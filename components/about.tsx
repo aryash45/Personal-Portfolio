@@ -3,6 +3,7 @@ export function About() {
     { label: "YEARS EXP", value: "7+" },
     { label: "PROJECTS", value: "40+" },
     { label: "TVL SECURED", value: "$2B+" },
+    { label: "GH STARS", value: "15K+" },
   ]
 
   const skills = [
