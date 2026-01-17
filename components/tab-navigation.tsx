@@ -23,9 +23,11 @@ export function TabNavigation({ activeTab, onTabChange }: TabNavigationProps) {
             key={tab.id}
             onClick={() => onTabChange(tab.id)}
             className={cn(
-              "px-6 md:px-12 py-4 font-mono text-sm tracking-wider transition-colors whitespace-nowrap",
+              "px-6 md:px-12 py-4 font-mono text-sm tracking-wider transition-all duration-300 whitespace-nowrap",
               "hover:bg-muted/20",
-              activeTab === tab.id ? "bg-foreground text-background" : "text-muted-foreground",
+              activeTab === tab.id
+                ? "bg-foreground text-background animate-slideInLeft"
+                : "text-muted-foreground hover:animate-pulse-subtle",
             )}
           >
             {tab.label}

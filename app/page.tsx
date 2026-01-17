@@ -32,7 +32,7 @@ export default function Home() {
       <div className="px-6 md:px-12 lg:px-24">
         <TabNavigation activeTab={activeTab} onTabChange={setActiveTab} />
       </div>
-      <div className="min-h-[60vh]">{renderContent()}</div>
+      <div className="min-h-[60vh] animate-fadeIn">{renderContent()}</div>
     </main>
   )
 }
