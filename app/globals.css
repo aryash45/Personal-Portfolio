@@ -184,6 +184,49 @@
   }
 }
 
+/* Scroll-responsive animations for geometric shapes */
+@keyframes floatUp {
+  0% {
+    transform: translateY(0px);
+  }
+  100% {
+    transform: translateY(-100px);
+  }
+}
+
+@keyframes rotateShape {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes scaleShapeIn {
+  0% {
+    transform: scale(0.8);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.animate-floatUp {
+  animation: floatUp 6s ease-in-out infinite;
+}
+
+.animate-rotateShape {
+  animation: rotateShape 8s linear infinite;
+}
+
+.animate-scaleShape {
+  animation: scaleShapeIn 4s ease-in-out infinite;
+}
+
 .animate-fadeIn {
   animation: fadeIn 0.5s ease-out;
 }

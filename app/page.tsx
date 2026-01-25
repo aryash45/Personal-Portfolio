@@ -11,6 +11,7 @@ import { StatsDashboard } from "@/components/stats-dashboard"
 import { NowSection } from "@/components/now-section"
 import { Newsletter } from "@/components/newsletter"
 import { BookingCTA } from "@/components/booking-cta"
+import { AnimatedBackground } from "@/components/animated-background"
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState("about")
@@ -31,18 +32,22 @@ export default function Home() {
   }
 
   return (
-    <main>
-      <Hero onTabChange={setActiveTab} />
-      <div className="px-6 md:px-12 lg:px-24">
-        <TabNavigation activeTab={activeTab} onTabChange={setActiveTab} />
+    <main className="relative">
+      <AnimatedBackground />
+      <div className="relative z-10">
+        <Hero onTabChange={setActiveTab} />
+        <div className="px-6 md:px-12 lg:px-24">
+          <TabNavigation activeTab={activeTab} onTabChange={setActiveTab} />
+        </div>
       </div>
       <div className="min-h-[60vh] animate-fadeIn">{renderContent()}</div>
-
-      {/* New Enhancement Sections */}
-      <StatsDashboard />
-      <NowSection />
-      <BookingCTA />
-      <Newsletter />
+      <div>
+        {/* New Enhancement Sections */}
+        <StatsDashboard />
+        <NowSection />
+        <BookingCTA />
+        <Newsletter />
+      </div>
     </main>
   )
 }
