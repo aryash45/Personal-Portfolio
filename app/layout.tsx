@@ -1,16 +1,18 @@
-import type React from "react"
-import type { Metadata } from "next"
-import { Space_Grotesk, JetBrains_Mono } from "next/font/google"
-import { Analytics } from "@vercel/analytics/next"
-import "./globals.css"
+import type React from "react";
+import type { Metadata } from 'next'
+import { Inter, JetBrains_Mono } from 'next/font/google'
+import './globals.css'
+import { ThemeProvider } from '@/components/theme-provider'
+import SmoothScroll from '@/components/smooth-scroll'
+import CustomCursor from '@/components/custom-cursor'
+import Preloader from '@/components/preloader'
 
-const spaceGrotesk = Space_Grotesk({ subsets: ["latin"] })
-const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"] })
+const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
+const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-jetbrains' })
 
 export const metadata: Metadata = {
-  title: "ALEX.DEV — Full-Stack AI & DeFi Engineer",
-  description: "Building intelligent systems at the intersection of AI and decentralized finance",
-    generator: 'v0.app'
+  title: 'ARYASH GUPTA | Full-Stack Developer & AI Engineer',
+  description: 'Chill full-stack dev brewing chaotic AI apps. Building intelligent systems and immersive web experiences.',
 }
 
 export default function RootLayout({
@@ -19,10 +21,23 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
-      <body className={`font-sans antialiased`}>
-        {children}
-        <Analytics />
+    <html lang="en" suppressHydrationWarning className="scroll-smooth">
+      <body className={`${inter.variable} ${jetbrainsMono.variable} font-sans antialiased text-white bg-[#050505]`}>
+        {/* Background Texture */}
+        <div className="noise fixed inset-0 z-[-1] opacity-[0.03] pointer-events-none" />
+        
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem={false}
+          disableTransitionOnChange
+        >
+          <SmoothScroll>
+            <CustomCursor />
+            <Preloader />
+            {children}
+          </SmoothScroll>
+        </ThemeProvider>
       </body>
     </html>
   )

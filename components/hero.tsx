@@ -1,125 +1,188 @@
 "use client"
 
-import { useState } from "react"
-import { Menu, X } from "lucide-react"
+import { motion } from "framer-motion"
 import { Terminal } from "./terminal"
+import { ChevronDown } from "lucide-react"
+import MagneticButton from "./magnetic-button"
 
-interface HeroProps {
-  onTabChange?: (tab: string) => void
-}
-
-export function Hero({ onTabChange }: HeroProps) {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-
-  const handleNavClick = (tab: string) => {
-    setMobileMenuOpen(false)
-    onTabChange?.(tab)
-  }
-
+export function Hero() {
   return (
-    <section className="min-h-[70vh] flex flex-col justify-between px-6 md:px-12 lg:px-24 py-12">
-      <header className="flex justify-between items-start">
-        <div className="font-mono text-sm tracking-widest text-muted-foreground">PORTFOLIO.2025</div>
+    <section className="relative min-h-screen flex flex-col justify-between overflow-hidden">
+      {/* Animated gradient background */}
+      <div className="absolute inset-0 gradient-bg" />
 
-        <button
-          className="md:hidden font-mono text-sm"
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          aria-label="Toggle menu"
+      {/* Floating orbs */}
+      <div
+        className="absolute top-1/4 -left-32 w-96 h-96 rounded-full animate-float opacity-30"
+        style={{
+          background:
+            "radial-gradient(circle, oklch(0.65 0.27 270 / 0.4), transparent 70%)",
+          filter: "blur(60px)",
+        }}
+      />
+      <div
+        className="absolute bottom-1/4 -right-32 w-80 h-80 rounded-full animate-float opacity-20"
+        style={{
+          background:
+            "radial-gradient(circle, oklch(0.72 0.18 195 / 0.4), transparent 70%)",
+          filter: "blur(60px)",
+          animationDelay: "3s",
+        }}
+      />
+      <div
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full opacity-10"
+        style={{
+          background:
+            "radial-gradient(circle, oklch(0.65 0.20 230 / 0.3), transparent 70%)",
+          filter: "blur(80px)",
+        }}
+      />
+
+      {/* Grid overlay */}
+      <div
+        className="absolute inset-0 opacity-[0.03]"
+        style={{
+          backgroundImage: `linear-gradient(oklch(0.95 0 0) 1px, transparent 1px),
+                            linear-gradient(90deg, oklch(0.95 0 0) 1px, transparent 1px)`,
+          backgroundSize: "80px 80px",
+        }}
+      />
+
+      {/* Content */}
+      <div className="relative z-10 flex-1 flex flex-col justify-between px-6 md:px-12 lg:px-24 pt-24 md:pt-32 pb-12">
+        {/* Top bar */}
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="flex justify-between items-start"
         >
-          {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-        </button>
+          <div className="font-mono text-xs tracking-[0.3em] text-muted-foreground">
+            PORTFOLIO.2025
+          </div>
+        </motion.div>
 
-        <nav className="font-mono text-sm space-x-8 hidden md:block">
-          <button onClick={() => handleNavClick("about")} className="hover:text-muted-foreground transition-colors">
-            ABOUT
-          </button>
-          <button
-            onClick={() => handleNavClick("experience")}
-            className="hover:text-muted-foreground transition-colors"
+        {/* Main hero content */}
+        <div className="flex-1 flex items-center py-12 md:py-20">
+          <div className="grid lg:grid-cols-2 gap-16 items-center w-full">
+            <div>
+              <motion.h1
+                className="text-5xl md:text-7xl lg:text-[5.5rem] font-bold leading-[0.9] tracking-tighter"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.3 }}
+              >
+                <motion.span
+                  className="block"
+                  initial={{ opacity: 0, y: 40 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.7, delay: 0.3, ease: [0.25, 0.4, 0.25, 1] }}
+                >
+                  FULL-STACK
+                </motion.span>
+                <motion.span
+                  className="block gradient-text"
+                  initial={{ opacity: 0, y: 40 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.7, delay: 0.45, ease: [0.25, 0.4, 0.25, 1] }}
+                >
+                  AI & WEB3
+                </motion.span>
+                <motion.span
+                  className="block"
+                  initial={{ opacity: 0, y: 40 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.7, delay: 0.6, ease: [0.25, 0.4, 0.25, 1] }}
+                >
+                  ENGINEER
+                </motion.span>
+              </motion.h1>
+
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.9 }}
+                className="mt-10 max-w-xl text-lg md:text-xl text-muted-foreground leading-relaxed font-mono"
+              >
+                Building intelligent systems and immersive web experiences. Chill full-stack dev brewing chaotic AI apps and decentralized tech.
+              </motion.p>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 1.1 }}
+                className="mt-8 flex flex-wrap items-center gap-6"
+              >
+                {/* CTA button */}
+                <MagneticButton>
+                  <a
+                    href="#projects"
+                    className="group relative inline-flex items-center gap-3 font-mono text-sm px-8 py-4 rounded-full overflow-hidden transition-all duration-300 hover:scale-105 interactive"
+                    style={{
+                      background:
+                        "linear-gradient(135deg, var(--accent-primary), var(--accent-secondary))",
+                    }}
+                  >
+                    <span className="relative z-10 text-white font-medium">
+                      VIEW PROJECTS
+                    </span>
+                    <span className="relative z-10 text-white group-hover:translate-x-1 transition-transform">
+                      →
+                    </span>
+                    {/* Shimmer overlay */}
+                    <div
+                      className="absolute inset-0 animate-shimmer opacity-0 group-hover:opacity-100 transition-opacity"
+                      style={{
+                        background:
+                          "linear-gradient(90deg, transparent, oklch(1 0 0 / 0.2), transparent)",
+                        backgroundSize: "200% 100%",
+                      }}
+                    />
+                  </a>
+                </MagneticButton>
+
+                {/* Status indicator */}
+                <div className="flex items-center gap-3">
+                  <div className="w-2 h-2 rounded-full bg-green-400 animate-glow-pulse" />
+                  <span className="font-mono text-xs text-muted-foreground tracking-wider">
+                    DEBUGGING WITH CONSOLE.LOG
+                  </span>
+                </div>
+              </motion.div>
+            </div>
+
+            {/* Terminal */}
+            <motion.div
+              initial={{ opacity: 0, x: 40 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.8 }}
+              className="hidden lg:block"
+            >
+              <Terminal />
+            </motion.div>
+          </div>
+        </div>
+
+        {/* Bottom bar */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6, delay: 1.3 }}
+          className="flex justify-between items-end"
+        >
+          <div className="font-mono text-xs text-muted-foreground">
+            ARYASH GUPTA
+            <br />
+            NEW DELHI, INDIA
+          </div>
+          <a
+            href="#about"
+            className="flex flex-col items-center gap-2 font-mono text-xs text-muted-foreground hover:text-foreground transition-colors interactive"
           >
-            EXPERIENCE
-          </button>
-          <button onClick={() => handleNavClick("projects")} className="hover:text-muted-foreground transition-colors">
-            PROJECTS
-          </button>
-          <button onClick={() => handleNavClick("contact")} className="hover:text-muted-foreground transition-colors">
-            CONTACT
-          </button>
-        </nav>
-      </header>
-
-      {mobileMenuOpen && (
-        <div className="fixed inset-0 bg-background z-50 flex flex-col items-center justify-center md:hidden">
-          <button className="absolute top-12 right-6" onClick={() => setMobileMenuOpen(false)} aria-label="Close menu">
-            <X className="w-6 h-6" />
-          </button>
-          <nav className="font-mono text-2xl space-y-8 text-center">
-            <button
-              className="block hover:text-muted-foreground transition-colors"
-              onClick={() => handleNavClick("about")}
-            >
-              ABOUT
-            </button>
-            <button
-              className="block hover:text-muted-foreground transition-colors"
-              onClick={() => handleNavClick("experience")}
-            >
-              EXPERIENCE
-            </button>
-            <button
-              className="block hover:text-muted-foreground transition-colors"
-              onClick={() => handleNavClick("projects")}
-            >
-              PROJECTS
-            </button>
-            <button
-              className="block hover:text-muted-foreground transition-colors"
-              onClick={() => handleNavClick("contact")}
-            >
-              CONTACT
-            </button>
-          </nav>
-        </div>
-      )}
-
-      <div className="flex-1 flex flex-col justify-center py-12">
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
-          <div>
-            <h1 className="text-5xl md:text-7xl lg:text-[6rem] font-bold leading-[0.9] tracking-tighter text-balance">
-              FULL-STACK
-              <br />
-              <span className="text-muted-foreground">AI & DEFI</span>
-              <br />
-              ENGINEER
-            </h1>
-            <div className="mt-12 max-w-xl">
-              <p className="text-lg md:text-xl text-muted-foreground leading-relaxed font-mono">
-                Building intelligent systems at the intersection of machine learning and decentralized finance. Shipping
-                code that thinks.
-              </p>
-            </div>
-            <div className="mt-8 flex items-center gap-3">
-              <div className="w-2 h-2 bg-green-500 animate-pulse" />
-              <span className="font-mono text-sm text-muted-foreground">AVAILABLE FOR CONSULTING</span>
-            </div>
-          </div>
-
-          <div className="hidden lg:block">
-            <Terminal />
-          </div>
-        </div>
-      </div>
-
-      <div className="flex justify-between items-end">
-        <div className="font-mono text-sm text-muted-foreground">
-          ALEX CHEN
-          <br />
-          SAN FRANCISCO, CA
-        </div>
-        <button onClick={() => handleNavClick("about")} className="group flex items-center gap-2 font-mono text-sm">
-          EXPLORE
-          <span className="group-hover:translate-x-1 transition-transform">→</span>
-        </button>
+            SCROLL
+            <ChevronDown className="w-4 h-4 animate-bounce-subtle" />
+          </a>
+        </motion.div>
       </div>
     </section>
   )
