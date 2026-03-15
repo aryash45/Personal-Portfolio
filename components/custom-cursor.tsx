@@ -55,7 +55,8 @@ export default function CustomCursor() {
 
   return (
     <>
-      <style dangerouslySetInnerHTML={{ __html: 'body { cursor: none; }' }} />
+      {/* Scope cursor:none to fine-pointer (mouse) devices only — touch keeps native cursor */}
+      <style dangerouslySetInnerHTML={{ __html: '@media (pointer: fine) { body { cursor: none; } }' }} />
       <motion.div
         ref={cursorRef}
         className="pointer-events-none fixed top-0 left-0 z-[100] h-8 w-8 rounded-full border border-[var(--accent-primary)] mix-blend-difference"

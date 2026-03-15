@@ -11,8 +11,8 @@ const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-jetbrains' })
 
 export const metadata: Metadata = {
-  title: 'ARYASH GUPTA | Full-Stack Developer & AI Engineer',
-  description: 'Chill full-stack dev brewing chaotic AI apps. Building intelligent systems and immersive web experiences.',
+  title: 'ARYASH GUPTA | Full-Stack AI & Web3 Engineer',
+  description: 'Full-stack engineer specializing in AI, DeFi, and Web3. Building intelligent systems with Next.js, Solana, and LLM-powered applications. New Delhi, India.',
 }
 
 export default function RootLayout({

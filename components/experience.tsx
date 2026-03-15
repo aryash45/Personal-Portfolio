@@ -88,7 +88,7 @@ export function Experience() {
             key={index}
             variants={staggerItem}
             href={exp.link}
-            className="group block py-8 md:py-10 transition-all duration-300 hover:bg-white/[0.02] -mx-6 md:-mx-12 lg:-mx-24 px-6 md:px-12 lg:px-24"
+            className="group relative block py-8 md:py-10 transition-all duration-300 hover:bg-white/[0.02] -mx-6 md:-mx-12 lg:-mx-24 px-6 md:px-12 lg:px-24"
           >
             <div className="grid md:grid-cols-12 gap-4 md:gap-8 items-start">
               <div className="md:col-span-2 font-mono text-xs text-muted-foreground tracking-wider">
@@ -108,16 +108,18 @@ export function Experience() {
               </div>
             </div>
 
-            {/* Bottom border that animates color on hover */}
-            <div className="mt-8 md:mt-10 h-px bg-white/5 group-hover:bg-white/10 transition-colors relative overflow-hidden">
-              <div
-                className="absolute inset-0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"
-                style={{
-                  background:
-                    "linear-gradient(90deg, transparent, var(--accent-primary), transparent)",
-                }}
-              />
-            </div>
+            {/* Single separator — only between items, not after the last */}
+            {index < experiences.length - 1 && (
+              <div className="absolute bottom-0 left-6 right-6 md:left-12 md:right-12 lg:left-24 lg:right-24 h-px bg-white/5 group-hover:bg-white/10 transition-colors overflow-hidden">
+                <div
+                  className="absolute inset-0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"
+                  style={{
+                    background:
+                      "linear-gradient(90deg, transparent, var(--accent-primary), transparent)",
+                  }}
+                />
+              </div>
+            )}
           </motion.a>
         ))}
       </StaggerContainer>

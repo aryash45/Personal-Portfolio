@@ -1,42 +1,59 @@
 "use client"
 
+import { useEffect, useRef, useState } from "react"
+import dynamic from "next/dynamic"
 import { motion } from "framer-motion"
 import { Terminal } from "./terminal"
 import { ChevronDown } from "lucide-react"
 import MagneticButton from "./magnetic-button"
 
+// Dynamically import the 3D scene — never SSR, keeps Three.js out of the server bundle
+const HeroScene = dynamic(
+  () => import("./3d/hero-scene").then((m) => m.HeroScene),
+  { ssr: false, loading: () => null }
+)
+
 export function Hero() {
+  // Normalized mouse position (-1 → 1) relative to viewport center
+  const mouseX = useRef(0)
+  const mouseY = useRef(0)
+  const [mouse, setMouse] = useState({ x: 0, y: 0 })
+
+  // Canvas fade on scroll (0 = fully visible, 1 = gone)
+  const [scrollOpacity, setScrollOpacity] = useState(1)
+
+  // Only render canvas on fine-pointer (non-touch) devices
+  const [isFinePonter, setIsFinePointer] = useState(false)
+
+  useEffect(() => {
+    // Check pointer type once on the client
+    setIsFinePointer(window.matchMedia("(pointer: fine)").matches)
+
+    const onMouseMove = (e: MouseEvent) => {
+      mouseX.current = (e.clientX / window.innerWidth) * 2 - 1
+      mouseY.current = -((e.clientY / window.innerHeight) * 2 - 1)
+      setMouse({ x: mouseX.current, y: mouseY.current })
+    }
+
+    const onScroll = () => {
+      // Fade canvas out over the first 60% of the hero height
+      const progress = Math.min(window.scrollY / (window.innerHeight * 0.6), 1)
+      setScrollOpacity(1 - progress)
+    }
+
+    window.addEventListener("mousemove", onMouseMove, { passive: true })
+    window.addEventListener("scroll", onScroll, { passive: true })
+
+    return () => {
+      window.removeEventListener("mousemove", onMouseMove)
+      window.removeEventListener("scroll", onScroll)
+    }
+  }, [])
+
   return (
     <section className="relative min-h-screen flex flex-col justify-between overflow-hidden">
-      {/* Animated gradient background */}
+      {/* Static gradient backdrop — always visible, especially on mobile */}
       <div className="absolute inset-0 gradient-bg" />
-
-      {/* Floating orbs */}
-      <div
-        className="absolute top-1/4 -left-32 w-96 h-96 rounded-full animate-float opacity-30"
-        style={{
-          background:
-            "radial-gradient(circle, oklch(0.65 0.27 270 / 0.4), transparent 70%)",
-          filter: "blur(60px)",
-        }}
-      />
-      <div
-        className="absolute bottom-1/4 -right-32 w-80 h-80 rounded-full animate-float opacity-20"
-        style={{
-          background:
-            "radial-gradient(circle, oklch(0.72 0.18 195 / 0.4), transparent 70%)",
-          filter: "blur(60px)",
-          animationDelay: "3s",
-        }}
-      />
-      <div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full opacity-10"
-        style={{
-          background:
-            "radial-gradient(circle, oklch(0.65 0.20 230 / 0.3), transparent 70%)",
-          filter: "blur(80px)",
-        }}
-      />
 
       {/* Grid overlay */}
       <div
@@ -48,7 +65,38 @@ export function Hero() {
         }}
       />
 
-      {/* Content */}
+      {/* 3D Canvas — desktop / fine-pointer only, fades on scroll */}
+      {isFinePonter && (
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{ opacity: scrollOpacity, transition: "opacity 0.1s linear" }}
+        >
+          <HeroScene mouseX={mouse.x} mouseY={mouse.y} />
+        </div>
+      )}
+
+      {/* Fallback ambient orbs for mobile (shown when canvas isn't rendered) */}
+      {!isFinePonter && (
+        <>
+          <div
+            className="absolute top-1/4 -left-32 w-96 h-96 rounded-full animate-float opacity-30"
+            style={{
+              background: "radial-gradient(circle, oklch(0.65 0.27 270 / 0.4), transparent 70%)",
+              filter: "blur(60px)",
+            }}
+          />
+          <div
+            className="absolute bottom-1/4 -right-32 w-80 h-80 rounded-full animate-float opacity-20"
+            style={{
+              background: "radial-gradient(circle, oklch(0.72 0.18 195 / 0.4), transparent 70%)",
+              filter: "blur(60px)",
+              animationDelay: "3s",
+            }}
+          />
+        </>
+      )}
+
+      {/* ─── Page Content ─── */}
       <div className="relative z-10 flex-1 flex flex-col justify-between px-6 md:px-12 lg:px-24 pt-24 md:pt-32 pb-12">
         {/* Top bar */}
         <motion.div
@@ -58,7 +106,7 @@ export function Hero() {
           className="flex justify-between items-start"
         >
           <div className="font-mono text-xs tracking-[0.3em] text-muted-foreground">
-            PORTFOLIO.2025
+            PORTFOLIO.2026
           </div>
         </motion.div>
 
@@ -86,7 +134,7 @@ export function Hero() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.7, delay: 0.45, ease: [0.25, 0.4, 0.25, 1] }}
                 >
-                  AI & WEB3
+                  AI &amp; WEB3
                 </motion.span>
                 <motion.span
                   className="block"
@@ -104,7 +152,8 @@ export function Hero() {
                 transition={{ duration: 0.6, delay: 0.9 }}
                 className="mt-10 max-w-xl text-lg md:text-xl text-muted-foreground leading-relaxed font-mono"
               >
-                Building intelligent systems and immersive web experiences. Chill full-stack dev brewing chaotic AI apps and decentralized tech.
+                Building intelligent systems and immersive web experiences. Chill
+                full-stack dev brewing chaotic AI apps and decentralized tech.
               </motion.p>
 
               <motion.div
@@ -113,7 +162,6 @@ export function Hero() {
                 transition={{ duration: 0.6, delay: 1.1 }}
                 className="mt-8 flex flex-wrap items-center gap-6"
               >
-                {/* CTA button */}
                 <MagneticButton>
                   <a
                     href="#projects"
@@ -123,13 +171,10 @@ export function Hero() {
                         "linear-gradient(135deg, var(--accent-primary), var(--accent-secondary))",
                     }}
                   >
-                    <span className="relative z-10 text-white font-medium">
-                      VIEW PROJECTS
-                    </span>
+                    <span className="relative z-10 text-white font-medium">VIEW PROJECTS</span>
                     <span className="relative z-10 text-white group-hover:translate-x-1 transition-transform">
                       →
                     </span>
-                    {/* Shimmer overlay */}
                     <div
                       className="absolute inset-0 animate-shimmer opacity-0 group-hover:opacity-100 transition-opacity"
                       style={{
@@ -151,7 +196,7 @@ export function Hero() {
               </motion.div>
             </div>
 
-            {/* Terminal */}
+            {/* Terminal — desktop only */}
             <motion.div
               initial={{ opacity: 0, x: 40 }}
               animate={{ opacity: 1, x: 0 }}
